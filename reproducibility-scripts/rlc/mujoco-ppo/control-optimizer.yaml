@@ -1,0 +1,36 @@
+project: po-dynamics-rlc
+name: mujoco-ppo-control-optimizer
+method: grid
+metric:
+  goal: maximize
+  name: batch/perf/avg_return_raw
+parameters:
+  wandb.mode:
+    value: online
+  wandb.tags:
+    value: [rlc, experiment, control, optimizer]
+  outputs_subdir:
+    value: rlconf
+  job_subdir:
+    value: "mujoco-ppo/control/optimizer"
+  env:
+    value: gym-mujoco
+  env.name:
+    values: [ "Hopper-v4", "Humanoid-v4" ]
+  seed:
+    values: [ 25, 7, 64 ]
+  optim.num_epochs:
+    values: [ 10, 15, 20 ]
+  optim.anneal_linearly:
+    values: [ False, True ]
+  models.activation:
+    values: [ Tanh, ReLU ]
+  collector.total_env_steps:
+    value: 5_000_000
+  optim.reset_state:
+    value: True
+command:
+  - python
+  - "-m"
+  - "po_dynamics.solve"
+  - ${args_no_hyphens}

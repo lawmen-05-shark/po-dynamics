@@ -1,0 +1,38 @@
+project: po-dynamics-rlc
+name: atari-ppo-control-all
+method: grid
+metric:
+  goal: maximize
+  name: batch/perf/avg_return_raw
+parameters:
+  wandb.mode:
+    value: online
+  wandb.tags:
+    value: [rlc, experiment, control, all]
+  outputs_subdir:
+    value: rlconf
+  job_subdir:
+    value: "atari-ppo/control/all"
+  env:
+    value: gym-atari
+  env.name:
+    values: [ "ALE/Phoenix-v5", "ALE/Gravitar-v5", "ALE/NameThisGame-v5" ]
+  seed:
+    values: [ 25, 7, 64 ]
+  optim.num_epochs:
+    values: [ 4, 6, 8 ]
+  optim.anneal_linearly:
+    values: [ False, True ]
+  loss.policy.kwargs.feature_trust_region_coef:
+    value: 1
+  optim.reset_state:
+    value: True
+  models.share_features:
+    value: True
+command:
+  - python
+  - "-m"
+  - "po_dynamics.solve"
+  - ${args_no_hyphens}
+
+# 3 * 3 * 3 * 2  = 54
